@@ -1,7 +1,7 @@
 const router = require('express').Router();
-const { Thought, User } = require('../models');
+const User = require('../../models/User');
+const Thought = require('../../models/Thought');
 
-// GET to get all thoughts
 router.get('/', async (req, res) => {
   try {
     const thoughts = await Thought.find().sort({ createdAt: -1 });
@@ -12,7 +12,6 @@ router.get('/', async (req, res) => {
   }
 });
 
-// GET to get a single thought by its _id
 router.get('/:id', async (req, res) => {
   const { id } = req.params;
 
@@ -28,7 +27,6 @@ router.get('/:id', async (req, res) => {
   }
 });
 
-// POST to create a new thought
 router.post('/', async (req, res) => {
   const { thoughtText, username, userId } = req.body;
 
@@ -49,7 +47,6 @@ router.post('/', async (req, res) => {
   }
 });
 
-// PUT to update a thought by its _id
 router.put('/:id', async (req, res) => {
   const { id } = req.params;
   const { thoughtText } = req.body;
@@ -70,7 +67,6 @@ router.put('/:id', async (req, res) => {
   }
 });
 
-// DELETE to remove a thought by its _id
 router.delete('/:id', async (req, res) => {
   const { id } = req.params;
 

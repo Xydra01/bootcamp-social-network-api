@@ -1,7 +1,6 @@
 const router = require('express').Router();
-const { User } = require('../models');
+const User = require('../../models/User');
 
-// GET all users
 router.get('/', async (req, res) => {
   try {
     const users = await User.find();
@@ -12,7 +11,6 @@ router.get('/', async (req, res) => {
   }
 });
 
-// GET a single user by its _id and populated thought and friend data
 router.get('/:id', async (req, res) => {
   try {
     const user = await User.findById(req.params.id)
@@ -30,7 +28,6 @@ router.get('/:id', async (req, res) => {
   }
 });
 
-// POST a new user
 router.post('/', async (req, res) => {
   try {
     const newUser = await User.create(req.body);
@@ -41,7 +38,6 @@ router.post('/', async (req, res) => {
   }
 });
 
-// PUT to update a user by its _id
 router.put('/:id', async (req, res) => {
   try {
     const updatedUser = await User.findByIdAndUpdate(req.params.id, req.body, {
@@ -54,7 +50,6 @@ router.put('/:id', async (req, res) => {
   }
 });
 
-// DELETE to remove user by its _id
 router.delete('/:id', async (req, res) => {
   try {
     const deletedUser = await User.findByIdAndDelete(req.params.id);

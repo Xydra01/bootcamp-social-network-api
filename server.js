@@ -8,15 +8,7 @@ const app = express();
 const PORT = process.env.PORT || 3000;
 
 // Connect to MongoDB
-mongoose.connect(process.env.MONGODB_URI, {
-  useNewUrlParser: true,
-  useUnifiedTopology: true,
-  useCreateIndex: true,
-});
-
-// Define Mongoose models
-const User = require('./models/User');
-const Thought = require('./models/Thought');
+mongoose.connect(process.env.MONGODB_URI);
 
 // Set up middleware
 app.use(express.json());
@@ -24,7 +16,10 @@ app.use(express.json());
 // Define routes
 app.use('/api/users', require('./routes/api/users'));
 app.use('/api/thoughts', require('./routes/api/thoughts'));
-app.use('/api/:thoughtId/reactions', require('./routes/api/reactions'));
+app.use(
+  '/api/thoughts/:thoughtId/reactions',
+  require('./routes/api/reactions')
+);
 
 // Start the server
 app.listen(PORT, () => {

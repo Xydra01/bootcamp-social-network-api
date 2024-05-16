@@ -1,43 +1,31 @@
-const router = require('express').Router();
-const { Thought } = require('../models');
+const express = require('express');
+const router = express.Router({ mergeParams: true });
+const Thought = require('../../models/Thought');
 
-// POST to create a reaction stored in a single thought's reactions array field
-router.post('/:thoughtId/reactions', async (req, res) => {
-  const { thoughtId } = req.params;
-  const { reactionBody, username } = req.body;
-
-  try {
-    const updatedThought = await Thought.findByIdAndUpdate(
-      thoughtId,
-      { $push: { reactions: { reactionBody, username } } },
-      { new: true }
-    );
-
-    if (!updatedThought) {
-      return res.status(404).json({ error: 'Thought not found' });
-    }
-
-    res.status(201).json(updatedThought);
-  } catch (error) {
-    console.error('Error creating reaction:', error);
-    res.status(500).json({ error: 'Failed to create reaction' });
-  }
-});
-
-// DELETE to pull and remove a reaction by the reaction's reactionId value
-router.delete('/:thoughtId/reactions/:reactionId', async (req, res) => {
+router.delete('/:reactionId', async (req, res) => {
   const { thoughtId, reactionId } = req.params;
 
   try {
-    const updatedThought = await Thought.findByIdAndUpdate(
-      thoughtId,
-      { $pull: { reactions: { _id: reactionId } } },
-      { new: true }
-    );
-
-    if (!updatedThought) {
+    const thought = await Thought.findById(thoughtId);
+    if (!thought) {
       return res.status(404).json({ error: 'Thought not found' });
     }
+
+    console.log('Thought:', thought);
+    console.log('Reactions:', thought.reactions);
+
+    const reactionIndex = thought.reactions.findIndex(
+      (reaction) => reaction.reactionId.toString() === reactionId.toString()
+    );
+
+    console.log('Reaction Index:', reactionIndex);
+
+    if (reactionIndex === -1) {
+      return res.status(404).json({ error: 'Reaction not found' });
+    }
+
+    thought.reactions.splice(reactionIndex, 1);
+    const updatedThought = await thought.save();
 
     res.json(updatedThought);
   } catch (error) {
