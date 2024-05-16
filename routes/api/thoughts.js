@@ -67,6 +67,7 @@ router.put('/:id', async (req, res) => {
   }
 });
 
+// DELETE to remove a thought by its _id
 router.delete('/:id', async (req, res) => {
   const { id } = req.params;
 
