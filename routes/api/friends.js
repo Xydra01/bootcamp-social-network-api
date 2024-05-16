@@ -4,6 +4,10 @@ const User = require('../../models/User');
 router.post('/:userId/friends/:friendId', async (req, res) => {
   const { userId, friendId } = req.params;
 
+  console.log('POST /api/users/:userId/friends/:friendId');
+  console.log('userId:', userId);
+  console.log('friendId:', friendId);
+
   try {
     const user = await User.findById(userId);
     const friend = await User.findById(friendId);
@@ -29,6 +33,10 @@ router.post('/:userId/friends/:friendId', async (req, res) => {
 router.delete('/:userId/friends/:friendId', async (req, res) => {
   const { userId, friendId } = req.params;
 
+  console.log('DELETE /api/users/:userId/friends/:friendId');
+  console.log('userId:', userId);
+  console.log('friendId:', friendId);
+
   try {
     const user = await User.findById(userId);
 
@@ -38,7 +46,7 @@ router.delete('/:userId/friends/:friendId', async (req, res) => {
 
     user.friends = user.friends.filter((id) => id.toString() !== friendId);
     await user.save();
-
+    console.log('Updated user friends:', user.friends);
     res.json(user);
   } catch (error) {
     console.error('Error removing friend:', error);

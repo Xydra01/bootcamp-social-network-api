@@ -20,6 +20,7 @@ app.use(
   '/api/thoughts/:thoughtId/reactions',
   require('./routes/api/reactions')
 );
+app.use('/api/users', require('./routes/api/friends'));
 
 // Start the server
 app.listen(PORT, () => {
